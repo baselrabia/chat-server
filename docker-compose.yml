@@ -21,9 +21,9 @@ services:
       - '9090:80'
     environment:
         - PMA_ARBITRARY=1
-        
+    
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
@@ -49,6 +49,7 @@ services:
     depends_on:
       - mysql
       - redis
+      - elasticsearch
     ports:
       - "3000:3000"
     environment:
@@ -57,6 +58,7 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: chat_system_api_development
       RAILS_ENV: development
+      ELASTICSEARCH_HOST: http://elasticsearch:9200
     volumes:
       - ./chat_system_api:/app
       - /app/tmp

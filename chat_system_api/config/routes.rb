@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
-  # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :applications, param: :token do
     resources :chats, param: :number, only: [:index, :show, :create] do
-      resources :messages, param: :number, only: [:index, :show, :create]
+      resources :messages, param: :number, only: [:index, :show, :create] do
+        collection do
+          get 'search'
+        end
+      end
     end
   end
 end
