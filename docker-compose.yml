@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./.mysql_data:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: chat_system_api_development
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '9090:80'
+    environment:
+        - PMA_ARBITRARY=1
+        
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.1
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./.es_data:/usr/share/elasticsearch/data
+    ports:
+      - '9200:9200'
+
+  redis:
+    image: redis:alpine
+
+  api:
+    build:
+      context: ./chat_system_api 
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "3000:3000"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: chat_system_api_development
+      RAILS_ENV: development
+    volumes:
+      - ./chat_system_api:/app
+      - /app/tmp
+    stdin_open: true
+    tty: true
+
