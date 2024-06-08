@@ -16,13 +16,8 @@ class MessagesController < ApplicationController
   
     # POST /applications/:application_token/chats/:chat_number/messages
     def create
-      @message = @chat.messages.build(message_params)
-  
-      if @message.save
-        render json: {message_number: message_number, chat_number: @chat.number, body: params[:body]}, status: :created 
-      else
-        render json: @message.errors, status: :unprocessable_entity
-      end
+      MessageCreationWorker.perform_async(@application.token, @chat.number, message_params[:body])
+      render json: { message: 'Message creation initiated' }, status: :accepted
     end
     
     # GET /applications/:application_token/chats/:chat_number/messages/search

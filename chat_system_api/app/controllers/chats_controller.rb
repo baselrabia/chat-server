@@ -15,13 +15,8 @@ class ChatsController < ApplicationController
   
     # POST /applications/:application_token/chats
     def create
-      @chat = @application.chats.build
-  
-      if @chat.save
-        render json: @chat, status: :created, location: [@application, @chat]
-      else
-        render json: @chat.errors, status: :unprocessable_entity
-      end
+      ChatCreationWorker.perform_async(@application.token)
+      render json: { message: 'Chat creation initiated' }, status: :accepted
     end
   
     private

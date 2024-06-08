@@ -5,7 +5,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./.mysql_data:/var/lib/mysql"
+      - .mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: chat_system_api_development
@@ -35,12 +35,16 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./.es_data:/usr/share/elasticsearch/data
+      - .es_data:/usr/share/elasticsearch/data
     ports:
       - '9200:9200'
 
   redis:
     image: redis:alpine
+    volumes:
+      - .redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
 
   api:
     build:
@@ -75,10 +79,10 @@ services:
       - api
       - redis
     environment:
-      MYSQL_HOST: db
+      MYSQL_HOST: mysql
       MYSQL_USER: root
-      MYSQL_PASSWORD: rootpassword
-      MYSQL_DATABASE: chat_system
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: chat_system_api_development
       RAILS_ENV: development
     volumes:
       - ./chat_system_api:/app

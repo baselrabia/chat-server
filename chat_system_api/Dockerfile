@@ -40,5 +40,6 @@ EXPOSE 3000
 
 # Start the server in development mode
 ENTRYPOINT ["entrypoint.sh"]
-# Start cron and Rails server
-CMD ["sh", "-c", "/usr/bin/cron_job.sh && bundle exec rails server -b 0.0.0.0"]
+
+# Start the server
+CMD ["rails", "server", "-b", "0.0.0.0"]
