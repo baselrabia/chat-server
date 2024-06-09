@@ -12,6 +12,12 @@ class Chat < ApplicationRecord
   private
 
   def set_number
-    self.number = (application.chats.maximum(:number) || 0) + 1
+
+    # job send app id -- 
+    #
+    # 1000 chat - 1 application
+    # 1000 job 
+    #
+    self.number = (application.chats.maximum(:number) || 0) + 1 # TODO: create a single chat job 
   end
 end

@@ -30,9 +30,13 @@ module ChatSystemApi
     config.api_only = true
 
 
+    config.active_job.queue_adapter = :sidekiq
+
+
     # Add session and cookies middleware
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_chat_app_session'
     config.middleware.use Rack::MethodOverride
+
   end
 end
