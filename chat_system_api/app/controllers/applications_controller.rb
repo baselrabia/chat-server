@@ -5,7 +5,7 @@ class ApplicationsController < ApplicationController
     def index
       @applications = Application.order(created_at: :desc).page(params[:page]).per(params[:per_page] || 10)
       render json: {
-          applications: ActiveModelSerializers::SerializableResource.new(@applications, each_serializer: ApplicationSerializer),
+          data: ActiveModelSerializers::SerializableResource.new(@applications, each_serializer: ApplicationSerializer),
           meta: pagination_meta(@applications)
         }
     end

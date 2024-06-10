@@ -74,7 +74,7 @@ services:
     build:
       context: ./chat_system_api
       dockerfile: Dockerfile
-    command: bundle exec sidekiq -q default -q counter -q creation
+    command: bundle exec sidekiq -q default -q counter -q elasticsearch
     depends_on:
       - api
       - redis
@@ -84,6 +84,7 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: chat_system_api_development
       REDIS_URL: redis://redis:6379/0
+      ELASTICSEARCH_HOST: http://elasticsearch:9200
       RAILS_ENV: development
     volumes:
       - ./chat_system_api:/app

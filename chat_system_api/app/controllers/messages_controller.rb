@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
     def index
       @messages = @chat.messages.order(number: :desc).page(params[:page]).per(params[:per_page] || 10)
       render json: {
-        messages: ActiveModelSerializers::SerializableResource.new(@messages, each_serializer: MessageSerializer),
+        data: ActiveModelSerializers::SerializableResource.new(@messages, each_serializer: MessageSerializer),
         meta: pagination_meta(@messages)
       }
     end
@@ -30,7 +30,11 @@ class MessagesController < ApplicationController
         # 
         if params[:query].present?
             @messages = @chat.messages.search(params[:query],@chat.id)
-            render json: @messages 
+            if @messages.any?
+              render json: @messages
+            else
+              render json: { messages: [] }
+            end
         else
             render json: { error: "Query parameter is missing" }, status: :unprocessable_entity
         end

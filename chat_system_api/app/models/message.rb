@@ -5,7 +5,10 @@ class Message < ApplicationRecord
   validates :body, presence: true
 
   after_commit :enqueue_increment_messages_count_job, on: :create
-
+  after_commit :enqueue_index_message_job, on: :create
+  after_commit :enqueue_delete_message_job, on: :destroy
+  
+  
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
@@ -25,8 +28,8 @@ class Message < ApplicationRecord
         query: {
             bool: {
                 must: [
-                    { match: { chat_id: chat_id } },
-                    { query_string: { query: "*#{term}*", fields: [:body] } }
+                  { match: { chat_id: chat_id } },
+                  { match: { body: term } }, 
                 ]
             }
         }
@@ -37,6 +40,14 @@ class Message < ApplicationRecord
   private
   def enqueue_increment_messages_count_job
     IncrementMessagesCountJob.perform_later(chat_id)
+  end
+
+  def enqueue_index_message_job
+    MessageIndexerWorker.perform_async('index', id)
+  end
+
+  def enqueue_delete_message_job
+    MessageIndexerWorker.perform_async('delete', id)
   end
 end
 # # Ensure the Elasticsearch index is created and the model data is indexed

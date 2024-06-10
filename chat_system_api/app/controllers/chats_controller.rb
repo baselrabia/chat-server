@@ -6,7 +6,7 @@ class ChatsController < ApplicationController
     def index
       @chats = @application.chats.order(number: :desc).page(params[:page]).per(params[:per_page] || 10)
       render json: {
-          chats: ActiveModelSerializers::SerializableResource.new(@chats, each_serializer: ChatSerializer),
+          data: ActiveModelSerializers::SerializableResource.new(@chats, each_serializer: ChatSerializer),
           meta: pagination_meta(@chats)
         }
     end
