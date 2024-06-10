@@ -1,0 +1,319 @@
+{
+	"info": {
+		"_postman_id": "ddc677ff-95cb-45cb-9d40-200eee8ac2ce",
+		"name": "Instabug-Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8213387",
+		"_collection_link": "https://red-moon-115294.postman.co/workspace/nest-js~420fea8d-81ba-4ced-83ae-7592fa3dd4ed/collection/8213387-ddc677ff-95cb-45cb-9d40-200eee8ac2ce?action=share&source=collection_link&creator=8213387"
+	},
+	"item": [
+		{
+			"name": "Application",
+			"item": [
+				{
+					"name": "GetAllApplications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/applications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateApplication",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"my app\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/applications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetApplicationByAccessToken",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chat",
+			"item": [
+				{
+					"name": "GetApplicationChats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ/chats/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ",
+								"chats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateChat",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ/chats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show chat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ/chats/18",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ",
+								"chats",
+								"18"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "message",
+			"item": [
+				{
+					"name": " GetAllChatMessages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"text\": \"test\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ/chats/18/messages/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ",
+								"chats",
+								"18",
+								"messages",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Messages",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": {\n        \"body\": \"last world message\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ/chats/18/messages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ",
+								"chats",
+								"18",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show message",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ/chats/18/messages/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ",
+								"chats",
+								"18",
+								"messages",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchMessages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/applications/Ptm4WJWS1MEF7MnPzWT1zUVZ/chats/18/messages/search?query=last",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"applications",
+								"Ptm4WJWS1MEF7MnPzWT1zUVZ",
+								"chats",
+								"18",
+								"messages",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "last"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Get the current set of headers",
+					"const headers = pm.request.headers;",
+					"",
+					"// Add or update the Content-Type header",
+					"headers.upsert({ key: 'Content-Type', value: 'application/json' });",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
