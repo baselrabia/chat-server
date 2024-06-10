@@ -34,8 +34,8 @@ services:
       memlock:
         soft: -1
         hard: -1
-    volumes:
-      - .es_data:/usr/share/elasticsearch/data
+    # volumes:
+    #   - .es_data:/usr/share/elasticsearch/data
     ports:
       - '9200:9200'
 
@@ -74,7 +74,7 @@ services:
     build:
       context: ./chat_system_api
       dockerfile: Dockerfile
-    command: bundle exec sidekiq
+    command: bundle exec sidekiq -q default -q counter -q creation
     depends_on:
       - api
       - redis
@@ -83,6 +83,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: chat_system_api_development
+      REDIS_URL: redis://redis:6379/0
       RAILS_ENV: development
     volumes:
       - ./chat_system_api:/app

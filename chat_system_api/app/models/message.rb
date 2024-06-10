@@ -1,15 +1,15 @@
 class Message < ApplicationRecord
-  belongs_to :chat, counter_cache: true
+  belongs_to :chat
 
   validates :number, presence: true, uniqueness: { scope: :chat_id }
   validates :body, presence: true
 
-  before_validation :set_number, on: :create
+  after_commit :enqueue_increment_messages_count_job, on: :create
 
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
-   settings do
+  settings do
     mapping dynamic: false do
       indexes :body, type: :text, analyzer: :english
       indexes :chat_id
@@ -35,12 +35,10 @@ class Message < ApplicationRecord
   end
 
   private
-
-  def set_number
-    self.number = (chat.messages.maximum(:number) || 0) + 1
+  def enqueue_increment_messages_count_job
+    IncrementMessagesCountJob.perform_later(chat_id)
   end
 end
-
-# Ensure the Elasticsearch index is created and the model data is indexed
-Message.__elasticsearch__.create_index! index: Message.index_name, force: true
-Message.import force: true
+# # Ensure the Elasticsearch index is created and the model data is indexed
+# Message.__elasticsearch__.create_index! index: Message.index_name, force: true
+# Message.import force: true

@@ -1,5 +1,5 @@
 class Chat < ApplicationRecord
-  belongs_to :application, counter_cache: true
+  belongs_to :application
   has_many :messages, dependent: :destroy
 
   validates :number,
@@ -7,17 +7,12 @@ class Chat < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 1 },
             uniqueness: { scope: :application_id }
 
-  before_validation :set_number, on: :create
+  after_commit :enqueue_increment_chat_count_job, on: :create
 
   private
 
-  def set_number
-
-    # job send app id -- 
-    #
-    # 1000 chat - 1 application
-    # 1000 job 
-    #
-    self.number = (application.chats.maximum(:number) || 0) + 1 # TODO: create a single chat job 
+  def enqueue_increment_chat_count_job
+    IncrementChatCountJob.perform_later(application_id)
   end
+  
 end

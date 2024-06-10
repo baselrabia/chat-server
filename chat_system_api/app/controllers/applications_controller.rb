@@ -3,8 +3,11 @@ class ApplicationsController < ApplicationController
   
     # GET /applications
     def index
-      @applications = Application.all #ToDo: pagination -- uuid
-      render json: @applications
+      @applications = Application.order(created_at: :desc).page(params[:page]).per(params[:per_page] || 10)
+      render json: {
+          applications: ActiveModelSerializers::SerializableResource.new(@applications, each_serializer: ApplicationSerializer),
+          meta: pagination_meta(@applications)
+        }
     end
   
     # GET /applications/:token
@@ -45,6 +48,16 @@ class ApplicationsController < ApplicationController
   
     def application_params
       params.require(:application).permit(:name)
+    end
+
+    def pagination_meta(chats)
+      {
+        total_pages: chats.total_pages,
+        current_page: chats.current_page,
+        next_page: chats.next_page,
+        prev_page: chats.prev_page,
+        total_count: chats.total_count
+      }
     end
   end
   

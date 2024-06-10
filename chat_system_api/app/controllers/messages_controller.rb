@@ -5,10 +5,12 @@ class MessagesController < ApplicationController
   
     # GET /applications/:application_token/chats/:chat_number/messages
     def index
-      @messages = @chat.messages #todo pagination // sorted desc  
-      render json: @messages.as_json(except: [:id, :chat_id])
+      @messages = @chat.messages.order(number: :desc).page(params[:page]).per(params[:per_page] || 10)
+      render json: {
+        messages: ActiveModelSerializers::SerializableResource.new(@messages, each_serializer: MessageSerializer),
+        meta: pagination_meta(@messages)
+      }
     end
-  
     # GET /applications/:application_token/chats/:chat_number/messages/:number
     def show
       render json: {message_number: @message.number, chat_number: @chat.number, body: @message.body}
@@ -41,6 +43,15 @@ class MessagesController < ApplicationController
       REDIS.incr("application:#{application_token},chat:#{chat_number}:msg_number")
     end
     
+    def pagination_meta(messages)
+      {
+        total_pages: messages.total_pages,
+        current_page: messages.current_page,
+        next_page: messages.next_page,
+        prev_page: messages.prev_page,
+        total_count: messages.total_count
+      }
+    end
   
     def set_application
       @application = Application.find_by!(token: params[:application_token])

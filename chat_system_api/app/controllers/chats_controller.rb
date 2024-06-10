@@ -4,8 +4,11 @@ class ChatsController < ApplicationController
   
     # GET /applications/:application_token/chats
     def index
-      @chats = @application.chats
-      render json: @chats
+      @chats = @application.chats.order(number: :desc).page(params[:page]).per(params[:per_page] || 10)
+      render json: {
+          chats: ActiveModelSerializers::SerializableResource.new(@chats, each_serializer: ChatSerializer),
+          meta: pagination_meta(@chats)
+        }
     end
   
     # GET /applications/:application_token/chats/:number
@@ -33,9 +36,19 @@ class ChatsController < ApplicationController
     def set_application
       @application = Application.find_by!(token: params[:application_token])
     end
-  
+
     def set_chat
       @chat = @application.chats.find_by!(number: params[:number])
+    end
+
+    def pagination_meta(chats)
+      {
+        total_pages: chats.total_pages,
+        current_page: chats.current_page,
+        next_page: chats.next_page,
+        prev_page: chats.prev_page,
+        total_count: chats.total_count
+      }
     end
   end
   
